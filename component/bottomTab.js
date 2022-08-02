@@ -19,7 +19,7 @@ export default class BottomTabNavigator extends React.Component{
                             if(route.name === 'Transaction'){
                                 iconName = 'book'
                             }else if(route.name === 'Search'){
-                                iconName = 'Search'
+                                iconName = 'search'
                             }
                             return <Ionicons name={iconName} size={size} color={color} />
                         }

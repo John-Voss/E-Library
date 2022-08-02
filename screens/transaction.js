@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, TouchableOpacity, ImageBackground, TextInput, Im
 import * as Permissions from 'expo-permissions';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+import db from '../config';
+
 const bgImage = require('../assets/background2.png');
 const appIcon =  require('../assets/appIcon.png');
 const appName = require('../assets/appName.png');
@@ -46,6 +48,27 @@ export default class TransactionScreen extends React.Component{
             })
         }
     }
+    handleTransaction=()=>{
+        var {bookId} = this.state;
+        db.collection('books')
+        .doc(bookId)
+        .get()
+        .then(doc=>{
+            var book = doc.data();
+            if(book.is_book_avaliable){
+                this.initiateBookIssue();
+            }else{
+                this.initiateBookReturn();
+            }
+        })
+    }
+    initiateBookIssue=()=>{
+
+        console.log('livro retirado pelo aluno')
+    }
+    initiateBookReturn=()=>{
+        console.log('livro devolvido pelo aluno')
+    }
     render(){
         const {domState, scanned, bookId, studentId} = this.state;
         if(domState !='normal'){
@@ -86,6 +109,9 @@ export default class TransactionScreen extends React.Component{
                                 <Text style={styles.scanbuttonText}>DIGITALIZAR</Text>
                             </TouchableOpacity>
                         </View>
+                        <TouchableOpacity style={styles.button} onPress={()=>this.handleTransaction()}>
+                            <Text style={styles.buttonText}>ENVIAR</Text>
+                        </TouchableOpacity>
                     </View>
                 </ImageBackground>
             </View>
@@ -155,5 +181,19 @@ const styles = StyleSheet.create({
       fontSize: 20,
       color: "#0A0101",
       fontFamily: "Rajdhani_600SemiBold"
+    },
+    button: {
+        width: "43%",
+        height: 55,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#F48D20",
+        borderRadius: 15,
+        marginTop: 25
+      },
+      buttonText: {
+        fontSize: 24,
+        color: "#FFFFFF",
+        fontFamily: "Rajdhani_600SemiBold"
     }
   });
